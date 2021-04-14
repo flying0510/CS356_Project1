@@ -1,0 +1,428 @@
+>> Make and Build...
+
+ykx@ykx-ubuntu:~/Documents/program/CS356_Prj1/pstree$ make
+make -C ~/kernel/kernel/goldfish ARCH=arm CROSS_COMPILE=arm-linux-androideabi- M=/home/ykx/Documents/program/CS356_Prj1/pstree modules
+make[1]: Entering directory '/home/ykx/kernel/kernel/goldfish'
+  CC [M]  /home/ykx/Documents/program/CS356_Prj1/pstree/pstree.o
+  Building modules, stage 2.
+  MODPOST 1 modules
+  CC      /home/ykx/Documents/program/CS356_Prj1/pstree/pstree.mod.o
+  LD [M]  /home/ykx/Documents/program/CS356_Prj1/pstree/pstree.ko
+make[1]: Leaving directory '/home/ykx/kernel/kernel/goldfish'
+
+
+ykx@ykx-ubuntu:~/Documents/program/CS356_Prj1/pstree_test/jni$ ndk-build
+[armeabi] Compile thumb  : testARM <= pstree_test.c
+[armeabi] Executable     : testARM
+[armeabi] Install        : testARM => libs/armeabi/testARM
+
+
+ykx@ykx-ubuntu:~/Documents/program/CS356_Prj1/pstree_execl/jni$ ndk-build
+[armeabi] Compile thumb  : execlARM <= ptree_execl.c
+[armeabi] Executable     : execlARM
+[armeabi] Install        : execlARM => libs/armeabi/execlARM
+
+
+ykx@ykx-ubuntu:~/Documents/program/CS356_Prj1/burger/jni$ ndk-build
+[armeabi] Compile thumb  : BBCARM <= BurgerBuddies.c
+[armeabi] Executable     : BBCARM
+[armeabi] Install        : BBCARM => libs/armeabi/BBCARM
+
+
+
+>> Upload...
+
+ykx@ykx-ubuntu:~/Documents/program/CS356_Prj1/pstree$ adb push pstree.ko /data/misc
+218 KB/s (3736 bytes in 0.016s)
+ykx@ykx-ubuntu:~/Documents/program/CS356_Prj1/pstree_test/libs/armeabi$ adb push testARM /data/misc
+495 KB/s (9496 bytes in 0.018s)
+ykx@ykx-ubuntu:~/Documents/program/CS356_Prj1/pstree_execl/libs/armeabi$ adb push execlARM /data/misc
+453 KB/s (9444 bytes in 0.020s)
+ykx@ykx-ubuntu:~/Documents/program/CS356_Prj1/burger/libs/armeabi$ adb push BBCARM /data/misc
+637 KB/s (13540 bytes in 0.020s)
+
+
+
+>> Run with correct input and arguments...
+
+>> Problem 1
+ykx@ykx-ubuntu:~/Documents/program/CS356_Prj1/burger/libs/armeabi$ adb shell
+root@generic:/ # cd data/misc
+root@generic:/data/misc # insmod pstree.ko
+root@generic:/data/misc # lsmod
+Module                  Size  Used by
+pstree                  1570  0 
+
+
+>> Problem 2
+root@generic:/data/misc # ./testARM
+swapper, 0, 0, 0, 1, 0, 0
+	init, 1, 1, 0, 45, 2, 0
+		ueventd, 45, 1, 1, 0, 62, 0
+		logd, 62, 1, 1, 0, 63, 1036
+		vold, 63, 1, 1, 0, 70, 0
+		healthd, 70, 1, 1, 0, 71, 0
+		lmkd, 71, 1, 1, 0, 72, 0
+		servicemanager, 72, 1, 1, 0, 73, 1000
+		surfaceflinger, 73, 1, 1, 0, 75, 1000
+		qemud, 75, 1, 1, 0, 78, 0
+		sh, 78, 1, 1, 0, 79, 2000
+		adbd, 79, 1, 1, 4656, 80, 0
+			sh, 4656, 1, 79, 0, 4761, 0
+			sh, 4761, 1, 79, 4769, 1, 0
+				testARM, 4769, 0, 4761, 0, 1, 0
+		netd, 80, 1, 1, 0, 82, 0
+		rild, 82, 1, 1, 0, 83, 1001
+		drmserver, 83, 1, 1, 0, 84, 1019
+		mediaserver, 84, 1, 1, 0, 87, 1013
+		installd, 87, 1, 1, 0, 88, 0
+		keystore, 88, 1, 1, 0, 89, 1017
+		main, 89, 1, 1, 262, 90, 0
+			system_server, 262, 1, 89, 0, 676, 1000
+			putmethod.latin, 676, 1, 89, 0, 698, 10032
+			m.android.phone, 698, 1, 89, 0, 705, 1001
+			droid.launcher3, 705, 1, 89, 0, 911, 10007
+			d.process.media, 911, 1, 89, 0, 1067, 10005
+			ndroid.systemui, 1067, 1, 89, 0, 1162, 10013
+			droid.deskclock, 1162, 1, 89, 0, 1183, 10023
+			m.android.email, 1183, 1, 89, 0, 1198, 10027
+			ndroid.exchange, 1198, 1, 89, 0, 1268, 10029
+			id.printspooler, 1268, 1, 89, 0, 1311, 10040
+			.android.dialer, 1311, 1, 89, 0, 1325, 10004
+			android.browser, 1325, 1, 89, 0, 1, 10017
+		gatekeeperd, 90, 1, 1, 0, 91, 1000
+		perfprofd, 91, 1, 1, 0, 93, 0
+		fingerprintd, 93, 1, 1, 0, 4353, 1000
+		debuggerd, 4353, 1, 1, 0, 1, 0
+	kthreadd, 2, 1, 0, 3, 0, 0
+		ksoftirqd/0, 3, 1, 2, 0, 6, 0
+		khelper, 6, 1, 2, 0, 7, 0
+		sync_supers, 7, 1, 2, 0, 8, 0
+		bdi-default, 8, 1, 2, 0, 9, 0
+		kblockd, 9, 1, 2, 0, 10, 0
+		rpciod, 10, 1, 2, 0, 12, 0
+		kswapd0, 12, 1, 2, 0, 13, 0
+		fsnotify_mark, 13, 1, 2, 0, 14, 0
+		crypto, 14, 1, 2, 0, 25, 0
+		kworker/u:1, 25, 1, 2, 0, 30, 0
+		mtdblock0, 30, 1, 2, 0, 35, 0
+		mtdblock1, 35, 1, 2, 0, 40, 0
+		mtdblock2, 40, 1, 2, 0, 41, 0
+		binder, 41, 1, 2, 0, 42, 0
+		deferwq, 42, 1, 2, 0, 43, 0
+		mmcqd/0, 43, 1, 2, 0, 44, 0
+		kworker/u:2, 44, 1, 2, 0, 47, 0
+		jbd2/mtdblock0-, 47, 1, 2, 0, 48, 0
+		ext4-dio-unwrit, 48, 1, 2, 0, 54, 0
+		jbd2/mtdblock1-, 54, 1, 2, 0, 55, 0
+		ext4-dio-unwrit, 55, 1, 2, 0, 60, 0
+		jbd2/mtdblock2-, 60, 1, 2, 0, 61, 0
+		ext4-dio-unwrit, 61, 1, 2, 0, 97, 0
+		kauditd, 97, 1, 2, 0, 729, 0
+		kworker/0:2, 729, 1, 2, 0, 2599, 0
+		kworker/0:0, 2599, 1, 2, 0, 4731, 0
+		flush-31:1, 4731, 1, 2, 0, 0, 0
+
+
+>> Problem 3
+root@generic:/data/misc # ./execlARM
+519030910240Parent, PID: 4770
+519030910240Child, PID: 4771
+swapper, 0, 0, 0, 1, 0, 0
+	init, 1, 1, 0, 45, 2, 0
+		ueventd, 45, 1, 1, 0, 62, 0
+		logd, 62, 1, 1, 0, 63, 1036
+		vold, 63, 1, 1, 0, 70, 0
+		healthd, 70, 1, 1, 0, 71, 0
+		lmkd, 71, 1, 1, 0, 72, 0
+		servicemanager, 72, 1, 1, 0, 73, 1000
+		surfaceflinger, 73, 1, 1, 0, 75, 1000
+		qemud, 75, 1, 1, 0, 78, 0
+		sh, 78, 1, 1, 0, 79, 2000
+		adbd, 79, 1, 1, 4656, 80, 0
+			sh, 4656, 1, 79, 0, 4761, 0
+			sh, 4761, 1, 79, 4770, 1, 0
+				execlARM, 4770, 1, 4761, 4771, 1, 0
+					testARM, 4771, 0, 4770, 0, 1, 0
+		netd, 80, 1, 1, 0, 82, 0
+		rild, 82, 1, 1, 0, 83, 1001
+		drmserver, 83, 1, 1, 0, 84, 1019
+		mediaserver, 84, 1, 1, 0, 87, 1013
+		installd, 87, 1, 1, 0, 88, 0
+		keystore, 88, 1, 1, 0, 89, 1017
+		main, 89, 1, 1, 262, 90, 0
+			system_server, 262, 1, 89, 0, 676, 1000
+			putmethod.latin, 676, 1, 89, 0, 698, 10032
+			m.android.phone, 698, 1, 89, 0, 705, 1001
+			droid.launcher3, 705, 1, 89, 0, 911, 10007
+			d.process.media, 911, 1, 89, 0, 1067, 10005
+			ndroid.systemui, 1067, 1, 89, 0, 1162, 10013
+			droid.deskclock, 1162, 1, 89, 0, 1183, 10023
+			m.android.email, 1183, 1, 89, 0, 1198, 10027
+			ndroid.exchange, 1198, 1, 89, 0, 1268, 10029
+			id.printspooler, 1268, 1, 89, 0, 1311, 10040
+			.android.dialer, 1311, 1, 89, 0, 1325, 10004
+			android.browser, 1325, 1, 89, 0, 1, 10017
+		gatekeeperd, 90, 1, 1, 0, 91, 1000
+		perfprofd, 91, 1, 1, 0, 93, 0
+		fingerprintd, 93, 1, 1, 0, 4353, 1000
+		debuggerd, 4353, 1, 1, 0, 1, 0
+	kthreadd, 2, 1, 0, 3, 0, 0
+		ksoftirqd/0, 3, 1, 2, 0, 6, 0
+		khelper, 6, 1, 2, 0, 7, 0
+		sync_supers, 7, 1, 2, 0, 8, 0
+		bdi-default, 8, 1, 2, 0, 9, 0
+		kblockd, 9, 1, 2, 0, 10, 0
+		rpciod, 10, 1, 2, 0, 12, 0
+		kswapd0, 12, 1, 2, 0, 13, 0
+		fsnotify_mark, 13, 1, 2, 0, 14, 0
+		crypto, 14, 1, 2, 0, 25, 0
+		kworker/u:1, 25, 1, 2, 0, 30, 0
+		mtdblock0, 30, 1, 2, 0, 35, 0
+		mtdblock1, 35, 1, 2, 0, 40, 0
+		mtdblock2, 40, 1, 2, 0, 41, 0
+		binder, 41, 1, 2, 0, 42, 0
+		deferwq, 42, 1, 2, 0, 43, 0
+		mmcqd/0, 43, 1, 2, 0, 44, 0
+		kworker/u:2, 44, 1, 2, 0, 47, 0
+		jbd2/mtdblock0-, 47, 1, 2, 0, 48, 0
+		ext4-dio-unwrit, 48, 1, 2, 0, 54, 0
+		jbd2/mtdblock1-, 54, 1, 2, 0, 55, 0
+		ext4-dio-unwrit, 55, 1, 2, 0, 60, 0
+		jbd2/mtdblock2-, 60, 1, 2, 0, 61, 0
+		ext4-dio-unwrit, 61, 1, 2, 0, 97, 0
+		kauditd, 97, 1, 2, 0, 729, 0
+		kworker/0:2, 729, 1, 2, 0, 2599, 0
+		kworker/0:0, 2599, 1, 2, 0, 4731, 0
+		flush-31:1, 4731, 1, 2, 0, 0, 0
+Child Completed!
+
+
+>> Problem 4
+root@generic:/data/misc # ./BBCARM 2 4 41 10
+Cooks: 2, Cashiers: 4, Customers: 41, RackSize: 10
+BEGIN:
+Customer [30] comes.
+Cashier [3] wakes up.
+Customer [20] comes.
+Cashier [1] wakes up.
+Customer [22] comes.
+Customer [25] comes.
+Cashier [0] wakes up.
+Cook [1] makes a burger.
+Cook [0] makes a burger.
+Cashier [1] accepts an order.
+Cashier [1] takes a burger to a customer.
+Cashier [1] goes to sleep.
+Cashier [3] accepts an order.
+Cashier [3] takes a burger to a customer.
+Cashier [3] goes to sleep.
+Cashier [0] accepts an order.
+Cashier [1] wakes up.
+Cashier [1] accepts an order.
+Customer [8] comes.
+Customer [5] comes.
+Customer [4] comes.
+Cook [1] makes a burger.
+Cook [0] makes a burger.
+Cashier [0] takes a burger to a customer.
+Cashier [0] accepts an order.
+Cashier [0] takes a burger to a customer.
+Cashier [0] goes to sleep.
+Customer [7] comes.
+Cashier [2] wakes up.
+Customer [2] comes.
+Cashier [2] accepts an order.
+Cook [1] makes a burger.
+Cashier [1] takes a burger to a customer.
+Cashier [1] accepts an order.
+Cook [0] makes a burger.
+Cashier [1] takes a burger to a customer.
+Cashier [1] accepts an order.
+Customer [39] comes.
+Customer [15] comes.
+Cashier [0] wakes up.
+Customer [36] comes.
+Cashier [3] wakes up.
+Customer [31] comes.
+Cashier [0] accepts an order.
+Cashier [3] accepts an order.
+Cook [1] makes a burger.
+Cashier [1] takes a burger to a customer.
+Cashier [1] accepts an order.
+Cook [0] makes a burger.
+Cashier [1] takes a burger to a customer.
+Cashier [1] accepts an order.
+Customer [16] comes.
+Customer [27] comes.
+Customer [40] comes.
+Customer [10] comes.
+Cook [1] makes a burger.
+Cashier [1] takes a burger to a customer.
+Cashier [1] accepts an order.
+Cook [0] makes a burger.
+Cashier [1] takes a burger to a customer.
+Cashier [1] accepts an order.
+Customer [28] comes.
+Customer [24] comes.
+Customer [32] comes.
+Customer [35] comes.
+Customer [14] comes.
+Customer [26] comes.
+Customer [29] comes.
+Customer [6] comes.
+Customer [1] comes.
+Customer [0] comes.
+Cook [1] makes a burger.
+Cashier [1] takes a burger to a customer.
+Cashier [1] accepts an order.
+Cook [0] makes a burger.
+Cashier [1] takes a burger to a customer.
+Cashier [1] accepts an order.
+Customer [11] comes.
+Customer [17] comes.
+Customer [13] comes.
+Customer [3] comes.
+Cook [1] makes a burger.
+Cashier [1] takes a burger to a customer.
+Cashier [1] accepts an order.
+Cook [0] makes a burger.
+Cashier [1] takes a burger to a customer.
+Cashier [1] accepts an order.
+Customer [23] comes.
+Customer [33] comes.
+Customer [34] comes.
+Customer [19] comes.
+Customer [21] comes.
+Cook [1] makes a burger.
+Cashier [1] takes a burger to a customer.
+Cashier [1] accepts an order.
+Cook [0] makes a burger.
+Cashier [1] takes a burger to a customer.
+Cashier [1] accepts an order.
+Customer [38] comes.
+Customer [37] comes.
+Customer [18] comes.
+Customer [9] comes.
+Cook [1] makes a burger.
+Cashier [2] takes a burger to a customer.
+Cashier [2] accepts an order.
+Cook [0] makes a burger.
+Cashier [2] takes a burger to a customer.
+Cashier [2] accepts an order.
+Customer [12] comes.
+Cook [1] makes a burger.
+Cashier [2] takes a burger to a customer.
+Cashier [2] accepts an order.
+Cook [0] makes a burger.
+Cashier [2] takes a burger to a customer.
+Cashier [2] accepts an order.
+Cook [1] makes a burger.
+Cashier [2] takes a burger to a customer.
+Cashier [2] accepts an order.
+Cook [0] makes a burger.
+Cashier [2] takes a burger to a customer.
+Cashier [2] accepts an order.
+Cook [1] makes a burger.
+Cashier [2] takes a burger to a customer.
+Cashier [2] accepts an order.
+Cook [0] makes a burger.
+Cashier [2] takes a burger to a customer.
+Cashier [2] accepts an order.
+Cook [1] makes a burger.
+Cashier [2] takes a burger to a customer.
+Cashier [2] goes to sleep.
+Cook [0] makes a burger.
+Cashier [0] takes a burger to a customer.
+Cashier [0] accepts an order.
+Cook [1] makes a burger.
+Cashier [0] takes a burger to a customer.
+Cashier [0] accepts an order.
+Cook [0] makes a burger.
+Cashier [0] takes a burger to a customer.
+Cashier [0] accepts an order.
+Cook [1] makes a burger.
+Cashier [0] takes a burger to a customer.
+Cashier [0] accepts an order.
+Cook [0] makes a burger.
+Cashier [0] takes a burger to a customer.
+Cashier [0] accepts an order.
+Cook [1] makes a burger.
+Cashier [0] takes a burger to a customer.
+Cashier [0] accepts an order.
+Cook [0] makes a burger.
+Cashier [0] takes a burger to a customer.
+Cashier [0] goes to sleep.
+Cook [1] makes a burger.
+Cook [0] makes a burger.
+Cashier [3] takes a burger to a customer.
+Cashier [3] accepts an order.
+Cashier [3] takes a burger to a customer.
+Cashier [3] accepts an order.
+Cook [1] makes a burger.
+Cook [0] makes a burger.
+Cashier [3] takes a burger to a customer.
+Cashier [3] accepts an order.
+Cashier [3] takes a burger to a customer.
+Cashier [3] goes to sleep.
+Cook [1] makes a burger.
+Cook [0] makes a burger.
+Cashier [1] takes a burger to a customer.
+Cashier [1] accepts an order.
+Cashier [1] takes a burger to a customer.
+Cashier [1] accepts an order.
+Cook [1] makes a burger.
+Cook [0] makes a burger.
+Cashier [1] takes a burger to a customer.
+Cashier [1] accepts an order.
+Cashier [1] takes a burger to a customer.
+Cashier [1] accepts an order.
+Cook [1] makes a burger.
+Cook [0] makes a burger.
+Cashier [1] takes a burger to a customer.
+Cashier [1] goes to sleep.
+END!
+All customers have been served!
+
+
+
+>> Run with incorrect input or arguments...
+
+>> Problem 2
+root@generic:/data/misc # ./testARM
+
+>> In kernel
+ptree() called.
+buf: b5638008, nr: b5638000
+Start traversing task tree.
+Buffer size is not enough!
+>> In kernel...
+ptree() called.
+buf: b5638008, nr: b5638000
+Start traversing task tree.
+Buffer pointer is null!
+>> In kernel...
+ptree() called.
+buf: b5638008, nr: b5638000
+Start traversing task tree.
+Buffer size pointer is null!
+
+
+>> Problem 4
+root@generic:/data/misc # ./BBCARM
+Wrong Input!
+Please Input Valid Variables (Positive Integer) (4)!
+1: the number of Cooks; 2: the number of cashiers; 3: the number of customers; 4: the size of Rack
+root@generic:/data/misc # ./BBCARM 0 4 41 10
+Wrong Input!
+Please Input Valid Variables (Positive Integer) (4)!
+1: the number of Cooks; 2: the number of cashiers; 3: the number of customers; 4: the size of Rack
+255|root@generic:/data/misc # ./BBCARM -1 4 41 10
+Wrong Input!
+Please Input Valid Variables (Positive Integer) (4)!
+1: the number of Cooks; 2: the number of cashiers; 3: the number of customers; 4: the size of Rack
+255|root@generic:/data/misc # 
+
+
+
+
